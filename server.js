@@ -3,9 +3,21 @@ const app = express();
 const { User, Story } = require('./db');
 const path = require('path');
 
+app.delete('/api/users/:id', async(req, res, next)=> {
+  try {
+    const user = await User.findByPk(req.params.id);
+    await user.destroy();
+    res.sendStatus(204);
+  }
+  catch(e) {
+    next(e);
+  }
+});
+
 app.use('/dist', express.static('dist'));
 
 app.get('/', (req, res)=> res.sendFile(path.join(__dirname, 'index.html')));
+
 app.get('/api/users', async(req, res, next)=> {
   try {
     res.send(await User.findAll({
