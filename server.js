@@ -3,9 +3,40 @@ const app = express();
 const { User, Story } = require('./db');
 const path = require('path');
 
+app.use(express.json());
+
+app.post('/api/users', async(req, res, next)=> {
+  try {
+    res.status(201).send(await User.create(req.body));
+  }
+  catch(e) {
+    next(e); 
+  }
+});
+
 app.delete('/api/users/:id', async(req, res, next)=> {
   try {
     const user = await User.findByPk(req.params.id);
+    await user.destroy();
+    res.sendStatus(204);
+  }
+  catch(e) {
+    next(e);
+  }
+});
+
+app.post('/api/users/:id/stories', async(req, res, next)=> {
+  try {
+    res.status(201).send(await Story.create(req.body));
+  }
+  catch(e) {
+    next(e); 
+  }
+});
+
+app.delete('/api/stories/:id', async(req, res, next)=> {
+  try {
+    const user = await Story.findByPk(req.params.id);
     await user.destroy();
     res.sendStatus(204);
   }
