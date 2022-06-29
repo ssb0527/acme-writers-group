@@ -14,7 +14,7 @@ const Users = ({ users, userId, destroy })=> {
               <a href={`#${user.id}`}>
                 { user.name }
               </a>
-              <button onClick={()=> destroy(user)}>X</button>
+              <button onClick={()=> destroy(user)}>❌</button>
             </li>
           );
         })

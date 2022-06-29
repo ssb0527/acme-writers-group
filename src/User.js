@@ -55,7 +55,7 @@ class User extends Component{
     const { destroy, create, favorite } = this;
     console.log(stories);
     return (
-      <div>
+      <div id="detail">
         Details for { user.name }
         <p>
           { user.bio }
@@ -67,9 +67,9 @@ class User extends Component{
               return (
                 <li key={ story.id }>
                   { story.title }
-                  <button onClick={()=> destroy(story)}>X</button>
+                  <button onClick={()=> destroy(story)}>❌</button>
                   {
-                  !story.favorite ? <button onClick={()=> favorite(story)}>Make Favorite</button>: <button onClick={()=> favorite(story)}>Unfavorite</button>
+                  !story.favorite ? <button onClick={()=> favorite(story)}>Make Favorite 📌</button>: <button onClick={()=> favorite(story)}>Unfavorite </button>
                   }
                   <p>
                   { story.body }
