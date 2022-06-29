@@ -11,12 +11,14 @@ class User extends Component{
     };
     this.destroy = this.destroy.bind(this);
     this.create = this.create.bind(this);
+    this.favorite = this.favorite.bind(this);
   }
   async create(user){
     const response = await axios.post(`/api/users/${user.id}/stories`, {
       title: faker.random.words(5),
       body: faker.lorem.paragraphs(5),
-      favorite: faker.datatype.boolean()
+      favorite: faker.datatype.boolean(),
+      userId: user.id
     });
     const stories = [...this.state.stories, response.data];
     this.setState({ stories });
@@ -24,6 +26,12 @@ class User extends Component{
   async destroy(story){
     await axios.delete(`/api/stories/${story.id}`)
     const stories = this.state.stories.filter(_story => _story.id !== story.id);
+    this.setState({stories});
+  }
+  favorite(story){
+    const selectedStory = this.state.stories.filter(_story => _story.id === story.id);
+    selectedStory[0].favorite = !(selectedStory[0].favorite);
+    const stories = this.state.stories;
     this.setState({stories});
   }
   async componentDidMount(){
@@ -39,12 +47,12 @@ class User extends Component{
       this.setState({ user: response.data });
       response = await axios.get(`/api/users/${this.props.userId}/stories`);
       this.setState({ stories: response.data });
-      
+    
     }
   }
   render(){
     const { user, stories } = this.state;
-    const { destroy, create } = this;
+    const { destroy, create, favorite } = this;
     console.log(stories);
     return (
       <div>
@@ -60,6 +68,9 @@ class User extends Component{
                 <li key={ story.id }>
                   { story.title }
                   <button onClick={()=> destroy(story)}>X</button>
+                  {
+                  !story.favorite ? <button onClick={()=> favorite(story)}>Make Favorite</button>: <button onClick={()=> favorite(story)}>Unfavorite</button>
+                  }
                   <p>
                   { story.body }
                   </p>
